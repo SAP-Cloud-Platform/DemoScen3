@@ -1,0 +1,5 @@
+implementation unmanaged;
+define behavior for /dmo/cesc3bp alias BusinessPartner
+{
+  action PERSIST_BP_IN_S4 result [1] $self;
+}

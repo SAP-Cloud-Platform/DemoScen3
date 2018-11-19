@@ -1,0 +1,4 @@
+@EndUserText.label: 'Business Partner Service Definition'
+define service /DMO/SDSC3BP {
+  expose /DMO/CESC3BP as BusinessPartner;
+}

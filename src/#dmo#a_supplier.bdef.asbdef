@@ -1,0 +1,6 @@
+ implementation abstract;
+ define behavior for /DMO/A_SUPPLIER
+ {
+  update;
+
+ }

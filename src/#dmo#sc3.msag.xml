@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>/DMO/SC3</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Business Partner Messages</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp;1&amp;2&amp;3&amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>&amp;1 &amp;2 &amp;3 &amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Data from &amp;1 cannot be retrived: HTTP &amp;2, &amp;3&amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Error retrieving data from &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>No Open Street Map partner found with id &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Multiple Open Street Map partners found with id &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Error sending data to &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Error calling simple transformation &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Different S/4 Business Partner (&amp;1) already assigned to entry &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>S/4 Business Partner already registered</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Connectivty error using path &amp;1&amp;2&amp;3&amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Connectivity error using destination &amp;1 in instance &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>S/4HANA Business Partner could not be created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>/DMO/SC3</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Filter criteria for field &amp;1 not supported</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

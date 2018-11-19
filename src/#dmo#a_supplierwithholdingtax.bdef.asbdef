@@ -1,0 +1,8 @@
+ implementation abstract;
+ define behavior for /DMO/A_SUPPLIERWITHHOLDINGTAX
+ {
+  create;
+ update;
+ delete;
+
+ }

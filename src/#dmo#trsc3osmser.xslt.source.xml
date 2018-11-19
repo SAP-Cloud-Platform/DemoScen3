@@ -1,0 +1,147 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates">
+
+<tt:root name="PLACES"/>
+
+<tt:template>
+    <array>
+      <tt:loop ref=".PLACES">
+        <object tt:extensible="deep">
+         <tt:group>
+            <tt:cond frq="?">
+              <str name="place_id">
+                <tt:value ref="$ref.place_id"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="licence">
+                <tt:value ref="$ref.licence"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="osm_type">
+                <tt:value ref="$ref.osm_type"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="osm_id">
+                <tt:value ref="$ref.osm_id"/>
+              </str>
+            </tt:cond>
+            <!--<tt:cond frq="?">
+              <str name="boundingbox">
+                <tt:value ref="$ref.boundingbox"/>
+              </str>
+            </tt:cond>-->
+            <tt:cond frq="?">
+              <str name="lat">
+                <tt:value ref="$ref.lat"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="lon">
+                <tt:value ref="$ref.lon"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="display_name">
+                <tt:value ref="$ref.display_name"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="class">
+                <tt:value ref="$ref.class"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="type">
+                <tt:value ref="$ref.type"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <num name="importance" >
+                <tt:value ref="$ref.importance"/>
+              </num>
+            </tt:cond>
+            <tt:cond frq="?">
+              <str name="icon">
+                <tt:value ref="$ref.icon"/>
+              </str>
+            </tt:cond>
+            <tt:cond frq="?">
+              <object name="address" tt:extensible="deep">
+                <tt:group>
+                  <tt:cond frq="?">
+                    <str name="hotel">
+                      <tt:value ref="$ref.address.hotel"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="house_number">
+                      <tt:value ref="$ref.address.house_number"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="road">
+                      <tt:value ref="$ref.address.road"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="neighbourhood">
+                      <tt:value ref="$ref.address.neighbourhood"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="suburb">
+                      <tt:value ref="$ref.address.suburb"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="city">
+                      <tt:value ref="$ref.address.city"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="county">
+                      <tt:value ref="$ref.address.county"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="state">
+                      <tt:value ref="$ref.address.state"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="postcode">
+                      <tt:value ref="$ref.address.postcode"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="country">
+                      <tt:value ref="$ref.address.country"/>
+                    </str>
+                  </tt:cond>
+                  <tt:cond frq="?">
+                    <str name="country_code">
+                      <tt:value ref="$ref.address.country_code"/>
+                    </str>
+                  </tt:cond>
+                  <!--Skip unknown fields-->
+                  <tt:cond frq="?">
+                    <!--<tt:skip count="1"/>-->
+                  </tt:cond>
+                </tt:group>
+              </object>
+            </tt:cond>
+            <!--Skip unknown fields-->
+            <tt:cond frq="?">
+              <!--<tt:skip count="1"/>-->
+            </tt:cond>
+          </tt:group>
+        </object>
+      </tt:loop>
+    </array>
+
+</tt:template>
+
+</tt:transform>
