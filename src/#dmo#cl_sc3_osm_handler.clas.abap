@@ -34,17 +34,19 @@ CLASS /dmo/cl_sc3_osm_handler DEFINITION
              address      TYPE ts_osm_address,
            END OF ts_osm_data,
            tt_osm_data TYPE STANDARD TABLE OF ts_osm_data WITH DEFAULT KEY,
-           BEGIN OF ts_businesspartner,
-             id          TYPE /dmo/sc3bpid,
-             name        TYPE /dmo/sc3bpname,
-             country     TYPE /dmo/sc3country,
-             countrycode TYPE /dmo/sc3countrycode,
-             city        TYPE /dmo/sc3city,
-             postcode    TYPE /dmo/sc3postcode,
-             road        TYPE /dmo/sc3road,
-             housenumber TYPE /dmo/sc3housenumber,
-             s4bpid      TYPE /dmo/sc3s4bpid,
-           END OF ts_businesspartner,
+            " Replaced with table definition
+*           BEGIN OF ts_businesspartner,
+*             id          TYPE /dmo/sc3bpid,
+*             name        TYPE /dmo/sc3bpname,
+*             country     TYPE /dmo/sc3country,
+*             countrycode TYPE /dmo/sc3countrycode,
+*             city        TYPE /dmo/sc3city,
+*             postcode    TYPE /dmo/sc3postcode,
+*             road        TYPE /dmo/sc3road,
+*             housenumber TYPE /dmo/sc3housenumber,
+*             s4bpid      TYPE /dmo/sc3s4bpid,
+*           END OF ts_businesspartner,
+           ts_businesspartner TYPE /dmo/tsc3bp,
            tt_businesspartner TYPE STANDARD TABLE OF ts_businesspartner WITH KEY id.
     TYPES: tt_city TYPE RANGE OF /dmo/sc3city.
 
@@ -57,7 +59,7 @@ CLASS /dmo/cl_sc3_osm_handler DEFINITION
         RAISING   /dmo/cx_sc3_bp,
       get_businesspartner_by_id
         IMPORTING iv_id              TYPE /dmo/sc3bpid
-        EXPORTING es_businesspartner TYPE ts_businesspartner
+        EXPORTING es_businesspartner TYPE /dmo/tsc3bp
         RAISING   /dmo/cx_sc3_bp.
 
   PROTECTED SECTION.
@@ -91,7 +93,7 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
 
   METHOD add_known_s4_partner.
     IF ct_businesspartner IS NOT INITIAL.
-      SELECT id, s4bpid FROM /dmo/tsc3bp
+      SELECT * FROM /dmo/tsc3bp
                FOR ALL ENTRIES IN @ct_businesspartner
                WHERE id = @ct_businesspartner-id
                INTO TABLE @DATA(lt_known_bp).
@@ -100,7 +102,8 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
         READ TABLE lt_known_bp WITH KEY id = lr_businesspartner->id
              REFERENCE INTO DATA(lr_known_bp) BINARY SEARCH.
         IF sy-subrc = 0.
-          lr_businesspartner->s4bpid = lr_known_bp->s4bpid.
+          "lr_businesspartner->s4bpid = lr_known_bp->s4bpid.
+          MOVE-CORRESPONDING lr_known_bp->* to lr_businesspartner->*.
         ENDIF.
       ENDLOOP.
     ENDIF.

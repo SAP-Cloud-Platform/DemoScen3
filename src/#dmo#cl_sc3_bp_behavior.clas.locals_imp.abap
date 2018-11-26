@@ -6,7 +6,9 @@ CLASS lcl_handler DEFINITION INHERITING FROM cl_abap_behavior_handler FINAL.
     " name of a BEHAVIOR method must be "MODIFY | READ | LOCK
     METHODS modify FOR BEHAVIOR IMPORTING
                                   persist_bp_in_s4 FOR ACTION businesspartner~persist_bp_in_s4
-                                                       RESULT persisted_bp_in_s4                                   .
+                                                       RESULT persisted_bp_in_s4
+                                  do_update        FOR UPDATE businesspartner
+                                  .
 
 ENDCLASS.
 
@@ -44,7 +46,6 @@ CLASS lcl_handler IMPLEMENTATION.
   METHOD modify.
 
     IF persist_bp_in_s4 IS NOT INITIAL.
-
       DATA lt_persist_bp_in_s4 TYPE lcl_buffer=>tt_persist_bp_in_s4.
       DATA ls_persist_bp_in_s4 LIKE LINE OF lt_persist_bp_in_s4.
       LOOP AT persist_bp_in_s4 REFERENCE INTO DATA(lr_persist_bp_in_s4).
@@ -53,6 +54,32 @@ CLASS lcl_handler IMPLEMENTATION.
         INSERT ls_persist_bp_in_s4 INTO TABLE lt_persist_bp_in_s4.
       ENDLOOP.
       lcl_buffer=>get_instance( )->set_persist_bp_in_s4( lt_persist_bp_in_s4 ).
+    ENDIF.
+
+    IF do_update IS NOT INITIAL.
+
+      LOOP AT do_update REFERENCE INTO DATA(lr_changed_fields).
+
+        " Read original from OSM
+        /dmo/cl_sc3_osm_handler=>get_businesspartner_by_id( EXPORTING iv_id = lr_changed_fields->id IMPORTING es_businesspartner = DATA(ls_persistence) ).
+
+        " Loop everything that could have changed and adjust
+        IF lr_changed_fields->name IS NOT INITIAL.
+          ls_persistence-name = lr_changed_fields->name.
+        ENDIF.
+        IF lr_changed_fields->road IS NOT INITIAL.
+          ls_persistence-road = lr_changed_fields->road.
+        ENDIF.
+        IF lr_changed_fields->housenumber IS NOT INITIAL.
+          ls_persistence-housenumber = lr_changed_fields->housenumber.
+        ENDIF.
+        IF lr_changed_fields->city IS NOT INITIAL.
+          ls_persistence-city = lr_changed_fields->city.
+        ENDIF.
+        " ...
+
+        MODIFY /dmo/tsc3bp FROM @ls_persistence.
+      ENDLOOP.
     ENDIF.
 
   ENDMETHOD.
@@ -86,7 +113,7 @@ CLASS lcl_saver IMPLEMENTATION.
     DATA(lt_persist_bp_in_s4) = lcl_buffer=>get_instance( )->get_persist_bp_in_s4( ).
     DATA lo_s4_handler   TYPE REF TO /dmo/cl_sc3_s4_handler.
     DATA lv_exist_s4bpid TYPE /dmo/sc3s4bpid.
-    DATA ls_bp_for_save  LIKE LINE OF mt_bp_for_save.
+    "DATA ls_bp_for_save  LIKE LINE OF mt_bp_for_save.
 
     " actions
     IF lt_persist_bp_in_s4 IS NOT INITIAL.
@@ -105,9 +132,9 @@ CLASS lcl_saver IMPLEMENTATION.
               DATA(lv_s4bpid) = lo_s4_handler->create_business_partner( is_businesspartner = ls_businesspartner ).
 
               "prepare for SAVE in local persistence
-              ls_bp_for_save-id     = lr_bp->id.
-              ls_bp_for_save-s4bpid = lv_s4bpid.
-              INSERT ls_bp_for_save INTO TABLE mt_bp_for_save.
+              ls_businesspartner-id     = lr_bp->id.
+              ls_businesspartner-s4bpid = lv_s4bpid.
+              INSERT ls_businesspartner INTO TABLE mt_bp_for_save.
 
             ELSE.
               " check that same bp is registered
@@ -139,7 +166,7 @@ CLASS lcl_saver IMPLEMENTATION.
   METHOD save.
     " register business partner in local system
     LOOP AT mt_bp_for_save INTO DATA(ls_bp_for_save).
-      INSERT /dmo/tsc3bp FROM @ls_bp_for_save.
+      MODIFY /dmo/tsc3bp FROM @ls_bp_for_save.
     ENDLOOP.
   ENDMETHOD.
 
