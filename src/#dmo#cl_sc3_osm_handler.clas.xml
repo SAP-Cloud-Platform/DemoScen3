@@ -14,6 +14,17 @@
     <FIXPT>X</FIXPT>
     <UNICODE>5</UNICODE>
    </VSEOCLASS>
+   <ATTRIBUTES>
+    <item>
+     <CMPNAME>GC_URL</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>GC_URL_SEARCH_PATH</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>GC_URL_REVERSE_PATH</CMPNAME>
+    </item>
+   </ATTRIBUTES>
   </asx:values>
  </asx:abap>
 </abapGit>

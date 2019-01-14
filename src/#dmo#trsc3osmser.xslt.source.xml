@@ -97,7 +97,7 @@
                     </str>
                   </tt:cond>
                   <tt:cond frq="?">
-                    <str name="city">
+                    <str name="town">
                       <tt:value ref="$ref.address.city"/>
                     </str>
                   </tt:cond>

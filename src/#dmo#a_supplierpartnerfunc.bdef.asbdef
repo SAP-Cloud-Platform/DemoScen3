@@ -1,8 +1,0 @@
- implementation abstract;
- define behavior for /DMO/A_SUPPLIERPARTNERFUNC
- {
-  create;
- update;
- delete;
-
- }

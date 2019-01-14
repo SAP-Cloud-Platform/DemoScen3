@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DCLS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DCLS>
+    <DCLNAME>/DMO/SC3BPLOCAL</DCLNAME>
+    <DCL_TYPE>ROLE</DCL_TYPE>
+    <ACTIVATION_STATUS>A</ACTIVATION_STATUS>
+    <DEVCLASS>/DMO/SC3_AGIT_SUPPORTED</DEVCLASS>
+    <MASTERLANG>E</MASTERLANG>
+    <LANGUAGE>E</LANGUAGE>
+    <SHORT_TEXT>DCL for Local Business Partner</SHORT_TEXT>
+   </DCLS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

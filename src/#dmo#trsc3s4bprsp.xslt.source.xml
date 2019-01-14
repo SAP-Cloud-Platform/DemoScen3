@@ -1,0 +1,16 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates">
+
+<tt:root name="ROOT"/>
+
+<tt:template>
+    <object tt:ref="ROOT">
+        <object name="d" tt:extensible="deep">
+            <str name="BusinessPartner">
+                <tt:value ref="$ref"/>
+            </str>
+        </object>
+    </object>
+</tt:template>
+
+</tt:transform>

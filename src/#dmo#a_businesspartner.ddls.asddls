@@ -55,36 +55,36 @@
  IsMarkedForArchiving : abap_boolean ; 
  BusinessPartnerIDByExtSystem : abap.char( 20 ) ; 
  
- @OData.property.name: 'to_BuPaIdentification' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _BuPaIdentification : association [0..*] to /DMO/A_BUPAIDENTIFICATION on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_BuPaIdentification' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _BuPaIdentification : association [0..*] to /DMO/A_BUPAIDENTIFICATION on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
  @OData.property.name: 'to_BusinessPartnerAddress' 
 //A dummy on-condition is required for associations in abstract entities 
 //On-condition is not relevant for runtime 
  _BusinessPartnerAddress : association [0..*] to /DMO/A_BUSINESSPARTNERADDRESS on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_BusinessPartnerBank' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _BusinessPartnerBank : association [0..*] to /DMO/A_BUSINESSPARTNERBANK on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_BusinessPartnerContact' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _BusinessPartnerContact : association [0..*] to /DMO/A_BUSINESSPARTNERCONTACT on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_BusinessPartnerRole' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _BusinessPartnerRole : association [0..*] to /DMO/A_BUSINESSPARTNERROLE on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_BusinessPartnerTax' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _BusinessPartnerTax : association [0..*] to /DMO/A_BUSINESSPARTNERTAXNUMBE on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_Customer' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _Customer : association [0..1] to /DMO/A_CUSTOMER on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
- @OData.property.name: 'to_Supplier' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _Supplier : association [0..1] to /DMO/A_SUPPLIER on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_BusinessPartnerBank' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _BusinessPartnerBank : association [0..*] to /DMO/A_BUSINESSPARTNERBANK on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_BusinessPartnerContact' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _BusinessPartnerContact : association [0..*] to /DMO/A_BUSINESSPARTNERCONTACT on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_BusinessPartnerRole' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _BusinessPartnerRole : association [0..*] to /DMO/A_BUSINESSPARTNERROLE on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_BusinessPartnerTax' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _BusinessPartnerTax : association [0..*] to /DMO/A_BUSINESSPARTNERTAXNUMBE on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_Customer' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _Customer : association [0..1] to /DMO/A_CUSTOMER on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
+// @OData.property.name: 'to_Supplier' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _Supplier : association [0..1] to /DMO/A_SUPPLIER on /DMO/A_BUSINESSPARTNER.BusinessPartner = /DMO/A_BUSINESSPARTNER.BusinessPartner; 
  } 

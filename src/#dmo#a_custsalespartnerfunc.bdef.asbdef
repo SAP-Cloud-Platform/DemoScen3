@@ -1,8 +1,0 @@
- implementation abstract;
- define behavior for /DMO/A_CUSTSALESPARTNERFUNC
- {
-  create;
- update;
- delete;
-
- }

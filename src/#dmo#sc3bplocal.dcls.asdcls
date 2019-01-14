@@ -1,0 +1,24 @@
+@EndUserText.label: 'DCL for Local Business Partner' 
+@MappingRole: true 
+define role /dmo/sc3bplocal { 
+    grant 
+        select 
+            on 
+                /DMO/SC3BPLOCAL 
+                    where 
+                        id is null or id is not null; 
+                            // -- Example WHERE condition 
+                            // -- Two-field mapping to PFCG authorization with filter on read authorization
+                            // ( SalesOrderID, OrgID ) = aspect pfcg_auth( S_ACM_DEMO, SACMTSOID, SACMORGUID, ACTVT = '03' ) 
+                            // and 
+                            // -- Equals-or-initial operator 
+                            // ( CustomerCountry ) ?= aspect pfcg_auth( S_ACM_DEMO, SACMCNTRY )
+                            // or 
+                            // -- Reference to the logged on users name 
+                            // CreatedBy = aspect User 
+                            // or 
+                            // inherit OtherRole for grant select on Entity
+                            // -- Literal condition 
+                            // isPublic = 'X'; 
+                            
+}

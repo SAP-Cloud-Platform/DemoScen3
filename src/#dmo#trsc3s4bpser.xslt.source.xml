@@ -1,0 +1,57 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates">
+
+<tt:root name="ROOT"/>
+
+<tt:template>
+   <object tt:ref="ROOT">
+     <!--<str name="BusinessPartner">
+       <tt:value ref="ROOT.BUSINESS_PARTNER_ID"/>
+     </str>-->
+     <str name="BusinessPartnerCategory">
+       <tt:value ref="BUSINESS_PARTNER_CATEGORY"/>
+     </str>
+     <str name="OrganizationBPName1">
+       <tt:value ref="ORGANIZATION_NAME"/>
+     </str>
+      <!--in case of an address structure shown as array output, use this-->
+     <array name="to_BusinessPartnerAddress">
+          <object>
+            <str name="Country">
+               <tt:value ref="BUSINESS_PARTNER_ADDRESS.COUNTRY"/>
+            </str>
+            <str name="PostalCode">
+              <tt:value ref="BUSINESS_PARTNER_ADDRESS.POSTAL_CODE"/>
+            </str>
+            <str name="CityName">
+              <tt:value ref="BUSINESS_PARTNER_ADDRESS.CITY_NAME"/>
+            </str>
+            <str name="StreetName">
+              <tt:value ref="BUSINESS_PARTNER_ADDRESS.STREET_NAME"/>
+            </str>
+           </object>
+      </array>
+      <!--in case of an address array, use this-->
+      <!--<array name="to_BusinessPartnerAddress">
+        <tt:loop ref="BUSINESS_PARTNER_ADDRESS">
+          <object>
+            <str name="Country">
+               <tt:value ref="$ref.COUNTRY"/>
+            </str>
+            <str name="PostalCode">
+              <tt:value ref="$ref.POSTAL_CODE"/>
+            </str>
+            <str name="CityName">
+              <tt:value ref="$ref.CITY_NAME"/>
+            </str>
+            <str name="StreetName">
+              <tt:value ref="$ref.STREET_NAME"/>
+            </str>
+           </object>
+        </tt:loop>
+      </array>-->
+    </object>
+
+</tt:template>
+
+</tt:transform>

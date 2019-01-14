@@ -33,21 +33,8 @@ CLASS /dmo/cl_sc3_osm_handler DEFINITION
              icon         TYPE string,
              address      TYPE ts_osm_address,
            END OF ts_osm_data,
-           tt_osm_data TYPE STANDARD TABLE OF ts_osm_data WITH DEFAULT KEY,
-            " Replaced with table definition
-*           BEGIN OF ts_businesspartner,
-*             id          TYPE /dmo/sc3bpid,
-*             name        TYPE /dmo/sc3bpname,
-*             country     TYPE /dmo/sc3country,
-*             countrycode TYPE /dmo/sc3countrycode,
-*             city        TYPE /dmo/sc3city,
-*             postcode    TYPE /dmo/sc3postcode,
-*             road        TYPE /dmo/sc3road,
-*             housenumber TYPE /dmo/sc3housenumber,
-*             s4bpid      TYPE /dmo/sc3s4bpid,
-*           END OF ts_businesspartner,
-           ts_businesspartner TYPE /dmo/tsc3bp,
-           tt_businesspartner TYPE STANDARD TABLE OF ts_businesspartner WITH KEY id.
+           tt_osm_data        TYPE STANDARD TABLE OF ts_osm_data WITH DEFAULT KEY,
+           tt_businesspartner TYPE STANDARD TABLE OF /dmo/tsc3bp. " WITH KEY id.
     TYPES: tt_city TYPE RANGE OF /dmo/sc3city.
 
     CLASS-METHODS:
@@ -88,7 +75,7 @@ ENDCLASS.
 
 
 
-CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
+CLASS /dmo/cl_sc3_osm_handler IMPLEMENTATION.
 
 
   METHOD add_known_s4_partner.
@@ -102,8 +89,7 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
         READ TABLE lt_known_bp WITH KEY id = lr_businesspartner->id
              REFERENCE INTO DATA(lr_known_bp) BINARY SEARCH.
         IF sy-subrc = 0.
-          "lr_businesspartner->s4bpid = lr_known_bp->s4bpid.
-          MOVE-CORRESPONDING lr_known_bp->* to lr_businesspartner->*.
+          MOVE-CORRESPONDING lr_known_bp->* TO lr_businesspartner->*.
         ENDIF.
       ENDLOOP.
     ENDIF.
@@ -136,49 +122,11 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
 
     CLEAR et_osm_data.
 
-*    Example: https://nominatim.openstreetmap.org/search?q=Hotels%20New%20York%20&format=json&polygon=0&addressdetails=1&limit=1
-*    "OSM result will look like this:
-*    "[
-*    "   {
-*    "      "place_id":"130400376",
-*    "      "licence":"Data © OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
-*    "      "osm_type":"way",
-*    "      "osm_id":"265147728",
-*    "      "boundingbox":[  ],
-*    "      "lat":"40.76447735",
-*    "      "lon":"-73.9744895761588",
-*    "      "display_name":"Plaza Hotel, 768, 5th Avenue, Upper East Side, Manhattan, Manhattan Community Board 5, New York County, NYC, New York, 10035, United States of America",
-*    "      "class":"tourism",
-*    "      "type":"hotel",
-*    "      "importance":0.58151155186229,
-*    "      "icon":"http:\/\/nominatim.openstreetmap.org\/images\/mapicons\/accommodation_hotel2.p.20.png",
-*    "      "address":{
-*    "         "hotel":"Plaza Hotel",
-*    "         "house_number":"768",
-*    "         "road":"5th Avenue",
-*    "         "neighbourhood":"Upper East Side",
-*    "         "suburb":"Manhattan",
-*    "         "city":"NYC",
-*    "         "county":"New York County",
-*    "         "state":"New York",
-*    "         "postcode":"10035",
-*    "         "country":"United States of America",
-*    "         "country_code":"us"
-*    "      }
-*    "   },
-*    "   ...
-*    "   ...
-*    "   ...
-*    "]
-
     TRY.
-
-        "http://nominatim.openstreetmap.org/search?q=Hotels Berlin &format=json&polygon=0&addressdetails=1&limit=20
-        "DATA(lo_destination) = cl_http_destination_provider=>create_by_url( i_url = gc_url && iv_uri_path ).
-
         DATA(lo_destination) = cl_http_destination_provider=>create_by_cloud_destination(
                                  i_name                  = 'OSM_NOMINATIM_NOAUTH'
-                                 i_service_instance_name = 'space-travel-destination'
+                                 i_service_instance_name = 'sc3-destination'
+                                 i_authn_mode            = if_a4c_cp_service=>service_specific
                                ).
         DATA(lo_web_client) = cl_web_http_client_manager=>create_by_http_destination( lo_destination ).
 
@@ -186,12 +134,12 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
 
         DATA(lo_web_response) = lo_web_client->execute( if_web_http_client=>get ).
         DATA(lv_web_result) = lo_web_response->get_text( ).
-        lo_web_client->close( ).
         DATA(ls_status) = lo_web_response->get_status( ).
+
+        lo_web_client->close( ).
+
         IF ls_status-code NE 200.
-          DATA lv_reason TYPE c LENGTH 100.
-          lv_reason = ls_status-reason.
-          RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e002(/dmo/sc3) WITH 'Open Street Map' ls_status-code lv_reason(50) lv_reason+50(50) ##NO_TEXT.
+          RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e002(/dmo/sc3) WITH 'Open Street Map' ls_status-code ls_status-reason ##NO_TEXT.
         ENDIF.
 
         IF lv_web_result IS INITIAL.
@@ -252,7 +200,7 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
                          IMPORTING et_businesspartner = et_businesspartner ).
 
     "(1) Workaround: reduce the result set down to max rows
-    ev_total_count = LINES( et_businesspartner ).
+    ev_total_count = lines( et_businesspartner ).
     LOOP AT et_businesspartner REFERENCE INTO DATA(lr_businesspartner).
       IF sy-tabix >= lv_max_rows.
         DELETE et_businesspartner INDEX sy-tabix.
@@ -264,7 +212,7 @@ CLASS /DMO/CL_SC3_OSM_HANDLER IMPLEMENTATION.
 
   METHOD trans_osm_data_2_bp.
 
-    DATA ls_businesspartner TYPE ts_businesspartner.
+    DATA ls_businesspartner TYPE /dmo/tsc3bp.
     CLEAR et_businesspartner.
 
     LOOP AT it_osm_data REFERENCE INTO DATA(lr_osm_data).

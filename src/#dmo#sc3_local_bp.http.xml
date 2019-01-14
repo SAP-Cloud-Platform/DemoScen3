@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_HTTP" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <HTTP>
+    <METADATA>
+     <NAME>/DMO/SC3_LOCAL_BP</NAME>
+     <TYPE>HTTP</TYPE>
+     <DESCRIPTION>Local Business Partner Service</DESCRIPTION>
+     <LANGUAGE>EN</LANGUAGE>
+     <MASTER_LANGUAGE>EN</MASTER_LANGUAGE>
+    </METADATA>
+    <TEXT>
+     <ID>/DMO/SC3_LOCAL_BP</ID>
+     <VERSION>A</VERSION>
+     <LANG>E</LANG>
+     <SHORTTEXT>Local Business Partner Service</SHORTTEXT>
+    </TEXT>
+    <HANDLER>
+     <UCONHTTPSERVHAND>
+      <ID>/DMO/SC3_LOCAL_BP</ID>
+      <VERSION>A</VERSION>
+      <SERVICEORDER>01</SERVICEORDER>
+      <SERVICEHANDLER>/DMO/CL_SC3_LOCAL_BP</SERVICEHANDLER>
+     </UCONHTTPSERVHAND>
+    </HANDLER>
+   </HTTP>
+  </asx:values>
+ </asx:abap>
+</abapGit>

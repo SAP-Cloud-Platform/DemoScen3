@@ -1,7 +1,0 @@
- implementation abstract;
- define behavior for /DMO/A_CUSTOMERSALESAREA
- {
-  create;
- update;
-
- }

@@ -40,7 +40,7 @@ CLASS /dmo/cl_sc3_s4_handler DEFINITION
         RAISING   /dmo/cx_sc3_bp,
 
       create_business_partner
-        IMPORTING is_businesspartner TYPE /dmo/cl_sc3_osm_handler=>ts_businesspartner
+        IMPORTING is_businesspartner TYPE /dmo/tsc3bp
         RETURNING VALUE(rv_s4bpid)   TYPE /dmo/sc3s4bpid
         RAISING   /dmo/cx_sc3_bp.
 
@@ -49,7 +49,7 @@ CLASS /dmo/cl_sc3_s4_handler DEFINITION
 **********************************************************************
     CONSTANTS gc_service_base_path TYPE string VALUE '/sap/opu/odata/sap/API_BUSINESS_PARTNER' ##NO_TEXT.
     CONSTANTS gc_destination TYPE string VALUE 'E1Y_BASIC' ##NO_TEXT.
-    CONSTANTS gc_srv_instance_name TYPE a4c_cp_svc_instance_name VALUE 'space-travel-destination' ##NO_TEXT.
+    CONSTANTS gc_srv_instance_name TYPE a4c_cp_svc_instance_name VALUE 'sc3-destination' ##NO_TEXT.
 **********************************************************************
     CLASS-DATA mt_bp_addressdata TYPE /dmo/tsc3bp .
     DATA mv_csrf_token TYPE string .
@@ -64,7 +64,7 @@ CLASS /dmo/cl_sc3_s4_handler DEFINITION
         /dmo/cx_sc3_bp .
     METHODS get_bp_json
       IMPORTING
-        !is_business_partner TYPE /dmo/cl_sc3_osm_handler=>ts_businesspartner
+        !is_business_partner TYPE /dmo/tsc3bp
       RETURNING
         VALUE(rv_json)       TYPE string .
 ENDCLASS.
@@ -96,7 +96,8 @@ CLASS /dmo/cl_sc3_s4_handler IMPLEMENTATION.
 
 
   METHOD create_business_partner.
-    DATA ls_businesspartner TYPE /dmo/cl_sc3_osm_handler=>ts_businesspartner.
+    DATA ls_businesspartner TYPE /dmo/tsc3bp.
+    DATA lx_web_ex          TYPE REF TO cx_web_http_client_error.
 
     TRY.
         " Convert data to S/4 BuPa JSON format
@@ -116,21 +117,25 @@ CLASS /dmo/cl_sc3_s4_handler IMPLEMENTATION.
         DATA(lo_response) = lo_http_client->execute( if_web_http_client=>post ).
 
         DATA(ls_status) = lo_response->get_status( ).
+
         IF ls_status-code EQ if_web_http_status=>created.
-          DATA(lr_data) = /ui2/cl_json=>generate( json = lo_response->get_text( ) ).
-          /ui2/cl_data_access=>create( ir_data = lr_data iv_component = 'd-businesspartner' )->value( IMPORTING ev_data = rv_s4bpid ).
+          DATA(lv_json_response) = lo_response->get_text( ).
+          CALL TRANSFORMATION /dmo/trsc3s4bprsp SOURCE XML lv_json_response RESULT root = rv_s4bpid.
           MODIFY /dmo/tsc3bp FROM @is_businesspartner.
         ELSE.
           RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e000(/dmo/sc3) WITH |Business Partner not created. Response from S/4 was: | |{ ls_status-code } { ls_status-reason }.|.
           rv_s4bpid = '-1'.
         ENDIF.
 
-        lo_http_client->close( ).
-
-      CATCH cx_web_http_client_error INTO DATA(lx_web_ex).
-        RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e000(/dmo/sc3) WITH |HTTP Client inetrnal error.| EXPORTING previous = lx_web_ex.
+      CATCH cx_web_http_client_error INTO lx_web_ex.
+        RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e000(/dmo/sc3) WITH |HTTP Client internal error.| EXPORTING previous = lx_web_ex.
+      CLEANUP.
+        TRY.
+            lo_http_client->close( ).
+          CATCH cx_web_http_client_error INTO lx_web_ex.
+            "TODO: Logging
+        ENDTRY.
     ENDTRY.
-
 
 *    DATA:
 *      lo_request     TYPE REF TO if_web_http_request,
@@ -218,19 +223,19 @@ CLASS /dmo/cl_sc3_s4_handler IMPLEMENTATION.
   METHOD get_bp_json.
     DATA: ls_s4_bp TYPE ts_s4_bp.
 
-    DATA(lt_json_mapping) = VALUE /ui2/cl_json=>name_mappings(
-                                     (  abap = 'ORGANIZATION_NAME'  json = 'OrganizationBPName1' )
-                                     (  abap = 'BUSINESS_PARTNER_CATEGORY'  json = 'BusinessPartnerCategory' )
-                                     (  abap = 'BUSINESS_PARTNER_ADDRESS'  json = 'to_BusinessPartnerAddress' )
-                                     (  abap = 'COUNTRY'  json = 'Country' )
-                                     (  abap = 'STREET_NAME'  json = 'StreetName' )
-                                     (  abap = 'POSTAL_CODE'  json = 'PostalCode' )
-                                     (  abap = 'CITY_NAME'  json = 'CityName' ) ).
+*    DATA(lt_json_mapping) = VALUE /ui2/cl_json=>name_mappings(
+*                                     (  abap = 'ORGANIZATION_NAME'  json = 'OrganizationBPName1' )
+*                                     (  abap = 'BUSINESS_PARTNER_CATEGORY'  json = 'BusinessPartnerCategory' )
+*                                     (  abap = 'BUSINESS_PARTNER_ADDRESS'  json = 'to_BusinessPartnerAddress' )
+*                                     (  abap = 'COUNTRY'  json = 'Country' )
+*                                     (  abap = 'STREET_NAME'  json = 'StreetName' )
+*                                     (  abap = 'POSTAL_CODE'  json = 'PostalCode' )
+*                                     (  abap = 'CITY_NAME'  json = 'CityName' ) ).
 
     " Map input to S/4 Business Partner structure
     ls_s4_bp = VALUE #(
-                " Hardcoded, because 2 equals Company
-                business_partner_category = '2'
+                "business_partner_id = is_business_partner-id
+                business_partner_category = '2' "Hard coded, because 2 equals Company
                 organization_name = is_business_partner-name
                 business_partner_address = VALUE ts_s4_bp_address(
                     country = is_business_partner-countrycode
@@ -239,13 +244,33 @@ CLASS /dmo/cl_sc3_s4_handler IMPLEMENTATION.
                     street_name = |{ is_business_partner-road } { is_business_partner-housenumber }|
                 ) ).
 
-    rv_json = /ui2/cl_json=>serialize(
-                data             = ls_s4_bp
-                name_mappings = lt_json_mapping
-              ).
+    " create JSON string
+    DATA(json_writer) = cl_sxml_string_writer=>create( type = if_sxml=>co_xt_json ).
+    TRY.
+        CALL TRANSFORMATION /dmo/trsc3s4bpser SOURCE root = ls_s4_bp RESULT XML json_writer.
+      CATCH cx_root INTO DATA(lx_exc).
+        RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e007(/dmo/sc3) WITH '/DMO/TRSC3S4BPSER'
+           EXPORTING
+             previous = lx_exc.
+    ENDTRY.
+    DATA(lv_json_xstring) = json_writer->get_output( ).
+    TRY.
+        DATA(lo_conv) = cl_abap_conv_codepage=>create_in( ).
+        DATA(lv_json_string) = lo_conv->convert( source = lv_json_xstring ).
+        rv_json = lv_json_string.
+      CATCH cx_sy_conversion_codepage cx_parameter_invalid_range INTO lx_exc.
+        RAISE EXCEPTION TYPE /dmo/cx_sc3_bp
+          EXPORTING
+            previous = lx_exc.
+    ENDTRY.
 
-    REPLACE ALL OCCURRENCES OF '"}}' IN rv_json WITH '"}]}' .
-    REPLACE ALL OCCURRENCES OF '":{"' IN rv_json WITH '":[{"' .
+*    rv_json = /ui2/cl_json=>serialize(
+*                data             = ls_s4_bp
+*                name_mappings = lt_json_mapping
+*              ).
+*
+*    REPLACE ALL OCCURRENCES OF '"}}' IN rv_json WITH '"}]}' .
+*    REPLACE ALL OCCURRENCES OF '":{"' IN rv_json WITH '":[{"' .
   ENDMETHOD.
 
 
@@ -262,18 +287,13 @@ CLASS /dmo/cl_sc3_s4_handler IMPLEMENTATION.
           go_web_client = cl_web_http_client_manager=>create_by_http_destination( lo_destination ).
 
           go_web_client->accept_cookies( i_allow = abap_true ).
-          "go_web_client->get_http_request( )->set_uri_path( gc_service_base_path ).
-        CATCH cx_http_dest_provider_error
-              cx_web_http_client_error
-             INTO DATA(lx_exc).
-          RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e011(/dmo/sc3) WITH gc_destination gc_srv_instance_name
-             EXPORTING
-               previous = lx_exc.
+        CATCH cx_http_dest_provider_error cx_web_http_client_error INTO DATA(lx_exc).
+          RAISE EXCEPTION TYPE /dmo/cx_sc3_bp MESSAGE e011(/dmo/sc3) WITH gc_destination gc_srv_instance_name EXPORTING previous = lx_exc.
       ENDTRY.
 
     ENDIF.
 
-    " set URI for Odata service access
+    " set URI for OData service access
     DATA(lv_uri_path) = gc_service_base_path && '/A_BusinessPartner' && iv_uri_parameter.
     TRY.
         go_web_client->get_http_request( )->set_uri_path( lv_uri_path ).

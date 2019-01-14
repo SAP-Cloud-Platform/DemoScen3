@@ -44,28 +44,28 @@
  TransportZone : abap.char( 10 ) ; 
  AddressIDByExternalSystem : abap.char( 20 ) ; 
  
- @OData.property.name: 'to_AddressUsage' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _AddressUsage : association [0..*] to /DMO/A_BUPAADDRESSUSAGE on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
- @OData.property.name: 'to_EmailAddress' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _EmailAddress : association [0..*] to /DMO/A_ADDRESSEMAILADDRESS on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
- @OData.property.name: 'to_FaxNumber' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _FaxNumber : association [0..*] to /DMO/A_ADDRESSFAXNUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
- @OData.property.name: 'to_MobilePhoneNumber' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _MobilePhoneNumber : association [0..*] to /DMO/A_ADDRESSPHONENUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
- @OData.property.name: 'to_PhoneNumber' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _PhoneNumber : association [0..*] to /DMO/A_ADDRESSPHONENUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
- @OData.property.name: 'to_URLAddress' 
-//A dummy on-condition is required for associations in abstract entities 
-//On-condition is not relevant for runtime 
- _URLAddress : association [0..*] to /DMO/A_ADDRESSHOMEPAGEURL on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_AddressUsage' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _AddressUsage : association [0..*] to /DMO/A_BUPAADDRESSUSAGE on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_EmailAddress' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _EmailAddress : association [0..*] to /DMO/A_ADDRESSEMAILADDRESS on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_FaxNumber' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _FaxNumber : association [0..*] to /DMO/A_ADDRESSFAXNUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_MobilePhoneNumber' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _MobilePhoneNumber : association [0..*] to /DMO/A_ADDRESSPHONENUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_PhoneNumber' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _PhoneNumber : association [0..*] to /DMO/A_ADDRESSPHONENUMBER on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
+// @OData.property.name: 'to_URLAddress' 
+////A dummy on-condition is required for associations in abstract entities 
+////On-condition is not relevant for runtime 
+// _URLAddress : association [0..*] to /DMO/A_ADDRESSHOMEPAGEURL on /DMO/A_BUSINESSPARTNERADDRESS.AddressID = /DMO/A_BUSINESSPARTNERADDRESS.AddressID; 
  } 

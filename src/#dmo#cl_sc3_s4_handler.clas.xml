@@ -14,6 +14,26 @@
     <FIXPT>X</FIXPT>
     <UNICODE>5</UNICODE>
    </VSEOCLASS>
+   <ATTRIBUTES>
+    <item>
+     <CMPNAME>GC_SERVICE_BASE_PATH</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>GC_DESTINATION</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>GC_SRV_INSTANCE_NAME</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>MT_BP_ADDRESSDATA</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>MV_CSRF_TOKEN</CMPNAME>
+    </item>
+    <item>
+     <CMPNAME>GO_WEB_CLIENT</CMPNAME>
+    </item>
+   </ATTRIBUTES>
   </asx:values>
  </asx:abap>
 </abapGit>

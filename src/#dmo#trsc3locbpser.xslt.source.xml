@@ -1,0 +1,50 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates">
+  <tt:root name="BUSINESS_PARTNERS"/>
+  <tt:template>
+    <html>
+      <body>
+        <h2>Local Business Partners:</h2>
+        <table border="2">
+          <tr>
+            <td><b>Id</b></td>
+            <td><b>ERP Id</b></td>
+            <td><b>Name</b></td>
+            <td><b>Street</b></td>
+            <td><b>House Number</b></td>
+            <td><b>Post Code</b></td>
+            <td><b>City</b></td>
+            <td><b>Country</b></td>
+          </tr>
+          <tt:loop ref=".BUSINESS_PARTNERS">
+            <tr><td>
+                <tt:value ref="$ref.id"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.s4bpid"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.name"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.road"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.housenumber"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.postcode"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.city"/>
+              </td>
+              <td>
+                <tt:value ref="$ref.country"/>
+              </td>
+            </tr>
+          </tt:loop>
+        </table>
+      </body>
+    </html>
+  </tt:template>
+</tt:transform>

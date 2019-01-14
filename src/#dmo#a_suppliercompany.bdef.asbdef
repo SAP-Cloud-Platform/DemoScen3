@@ -1,7 +1,0 @@
- implementation abstract;
- define behavior for /DMO/A_SUPPLIERCOMPANY
- {
-  create;
- update;
-
- }
